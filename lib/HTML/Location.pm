@@ -7,8 +7,8 @@ package HTML::Location;
 use strict;
 use UNIVERSAL 'isa';
 use base 'Clone';
-use URI ();
-use File::Spec ();
+use URI              ();
+use File::Spec       ();
 use File::Spec::Unix ();
 
 # Overload stringification to the string form of the URL.
@@ -18,7 +18,7 @@ use overload 'eq'   => '__eq';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.4';
+	$VERSION = '0.5';
 }
 
 
@@ -118,6 +118,11 @@ sub __eq {
 	my $left  = isa(ref $_[0], 'HTML::Location') ? shift : return '';
 	my $right = isa(ref $_[0], 'HTML::Location') ? shift : return '';
 	($left->path eq $right->path) and ($left->uri eq $right->uri);
+}
+
+# Support coercion to a URI via Param::Coerce
+BEGIN {
+	*__as_URI = *URI;
 }
 
 1;

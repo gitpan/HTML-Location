@@ -1,5 +1,8 @@
 Revision history for Perl extension HTML::Location
 
+0.5  Sat Oct  2 2004
+	- Added support for URI coercion via Param::Coerce
+
 0.4  Sat Sep 18 2004
 	- Added the ->param static method
 

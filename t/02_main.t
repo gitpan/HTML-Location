@@ -15,7 +15,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 126;
+use Test::More tests => 128;
 use Scalar::Util 'refaddr';
 use HTML::Location ();
 
@@ -30,6 +30,8 @@ my $location = HTML::Location->new( '/foo', 'http://foo.com' );
 is_normal_location( $location );
 is( $location->path, '/foo', '->path gives expected value' );
 is( $location->uri, 'http://foo.com/', '->uri returns expected value' );
+isa_ok( $location->URI, 'URI' );
+isa_ok( $location->__as_URI, 'URI' );
 
 # Test equality and overload
 my $location2 = HTML::Location->new( '/foo',  'http://foo.com' );
@@ -101,10 +103,6 @@ is( $dir->uri, 'http://foo.com/foo/bar', '->uri returns expected value' );
 is_normal_location( $location );
 is( $location->path, '/foo', '->path gives expected value' );
 is( $location->uri, 'http://foo.com/', '->uri returns expected value' );
-
-
-
-
 
 exit();
 
