@@ -1,5 +1,11 @@
 Revision history for Perl extension HTML::Location
 
+0.7  Tue Feb 15 2005
+	- Removing braindead Build.PL
+
+0.6  Tue Oct 12 2004
+	- Fixed Param::Coerce support for subclasses
+
 0.5  Sat Oct  2 2004
 	- Added support for URI coercion via Param::Coerce
 

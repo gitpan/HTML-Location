@@ -18,7 +18,7 @@ use overload 'eq'   => '__eq';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.6';
+	$VERSION = '0.7';
 }
 
 
@@ -62,7 +62,7 @@ sub param {
 
 sub path { $_[0]->{path} }
 sub uri  { $_[0]->{URI}->as_string }
-sub URI  { Clone::clone($_[0]->{URI}) }
+sub URI  { Clone::clone $_[0]->{URI} }
 
 
 
@@ -269,7 +269,7 @@ Bugs should be reported via the CPAN bug tracker at
 
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML%3A%3ALocation>
 
-For other issues, contact the author
+For other issues, or commercial enhancement or support, contact the author.
 
 =head1 AUTHORS
 
@@ -277,7 +277,7 @@ Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003 Adam Kennedy. All rights reserved.
+Copyright (c) 2003-2004 Adam Kennedy. All rights reserved.
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
 
