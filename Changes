@@ -1,4 +1,7 @@
 Revision history for Perl extension HTML::Location
 
+0.2  Fri Dec 12 2003
+	- Added a missing dependency on Clone
+
 0.1  Sun Dec  7 2003
 	- original version

@@ -4,6 +4,7 @@ WriteMakefile(
 	'NAME'         => 'HTML::Location',
 	'VERSION_FROM' => 'lib/HTML/Location.pm',
 	'PREREQ_PM'    => {
+		Clone      => 0.13,
 		File::Spec => 0.83,
 		Test::More => 0,
 		List::Util => 1.11,
