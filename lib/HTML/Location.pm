@@ -2,7 +2,7 @@ package HTML::Location;
 
 # See POD at end for documentation
 
-### Memory Overhead: 40K
+### Memory Overhead: 88k
 
 use strict;
 use UNIVERSAL 'isa';
@@ -18,7 +18,7 @@ use overload 'eq'   => '__eq';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.5';
+	$VERSION = '0.6';
 }
 
 
@@ -120,10 +120,14 @@ sub __eq {
 	($left->path eq $right->path) and ($left->uri eq $right->uri);
 }
 
-# Support coercion to a URI via Param::Coerce
-BEGIN {
-	*__as_URI = *URI;
-}
+
+
+
+
+#####################################################################
+# Coercion Support
+
+sub __as_URI { shift->URI }
 
 1;
 
