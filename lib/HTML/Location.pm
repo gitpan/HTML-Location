@@ -12,11 +12,13 @@ use File::Spec ();
 use File::Spec::Unix ();
 
 # Overload stringification to the string form of the URL.
-use overload '""' => 'uri';
+use overload 'bool' => sub () { 1 };
+use overload '""'   => 'uri';
+use overload 'eq'   => '__eq';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.3';
+	$VERSION = '0.4';
 }
 
 
@@ -39,6 +41,16 @@ sub new {
 
 	# Create the object
 	bless { path => $path, URI => $URI }, $class;
+}
+
+sub param {
+	my $class = shift;
+	return shift if isa(ref $_[0], 'HTML::Location');
+	return HTML::Location->new(@_) if @_ == 2;
+	if ( ref $_[0] eq 'ARRAY' and @{$_[0]} ) {
+		return HTML::Location->new(@{$_[0]});
+	}
+	undef;	
 }
 
 
@@ -93,6 +105,19 @@ sub catfile {
 	$changed->{path} = $new_fs;
 
 	$changed;
+}
+
+
+
+
+
+#####################################################################
+# Additional Overload Methods
+
+sub __eq {
+	my $left  = isa(ref $_[0], 'HTML::Location') ? shift : return '';
+	my $right = isa(ref $_[0], 'HTML::Location') ? shift : return '';
+	($left->path eq $right->path) and ($left->uri eq $right->uri);
 }
 
 1;
@@ -180,9 +205,18 @@ and as such allows for host-relative URL to be used.
 
 Returns a new C<HTML::Location> object on success, or C<undef> on failure.
 
+=head2 param $various
+
+C<param> is provided as a mechanism for higher order modules to flexibly
+accept HTML::Location's as parameters. In this case, it accepts either
+an existing HTML::Location object, two arguments ($path, $http_url), or
+a reference to an array containing the same two arguments.
+
+Returns a HTML::Location if possible, or C<undef> if one cannot be provided.
+
 =head2 uri
 
-The C<uri> method gets and returns the current URL of the location, in 
+The C<uri> method gets and returns the current URI of the location, in 
 string form.
 
 =head2 URI
@@ -224,15 +258,13 @@ the path.
 
 Bugs should be reported via the CPAN bug tracker at
 
-  http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML%3A%3ALocation
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML%3A%3ALocation>
 
 For other issues, contact the author
 
 =head1 AUTHORS
 
-        Adam Kennedy ( maintainer )
-        cpan@ali.as
-        http://ali.as/
+Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as
 
 =head1 COPYRIGHT
 

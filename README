@@ -72,8 +72,17 @@ METHODS
 
     Returns a new "HTML::Location" object on success, or "undef" on failure.
 
+  param $various
+    "param" is provided as a mechanism for higher order modules to flexibly
+    accept HTML::Location's as parameters. In this case, it accepts either
+    an existing HTML::Location object, two arguments ($path, $http_url), or
+    a reference to an array containing the same two arguments.
+
+    Returns a HTML::Location if possible, or "undef" if one cannot be
+    provided.
+
   uri
-    The "uri" method gets and returns the current URL of the location, in
+    The "uri" method gets and returns the current URI of the location, in
     string form.
 
   URI
@@ -110,14 +119,12 @@ TO DO
 SUPPORT
     Bugs should be reported via the CPAN bug tracker at
 
-      http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML%3A%3ALocation
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML%3A%3ALocation>
 
     For other issues, contact the author
 
 AUTHORS
-            Adam Kennedy ( maintainer )
-            cpan@ali.as
-            http://ali.as/
+    Adam Kennedy (Maintainer), <http://ali.as/>, cpan@ali.as
 
 COPYRIGHT
     Copyright (c) 2003 Adam Kennedy. All rights reserved. This program is
