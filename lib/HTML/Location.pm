@@ -16,7 +16,7 @@ use overload '""' => 'uri';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.2';
+	$VERSION = '0.3';
 }
 
 
@@ -111,16 +111,16 @@ HTML::Location - Working with disk to URI file mappings
   my $authors = HTML::Location->new( '/var/www/AUTHORS', 'http://ali.as/AUTHORS' );
   
   # We know where a particular generated file needs to go
-  my $file = $authors->catfile( 'A', 'AD', 'ADAMK', 'about.html' );
+  my $about = $authors->catfile( 'A', 'AD', 'ADAMK', 'about.html' );
   
   # Save the file to disk
-  my $filesystempath = $Location->path;
-  open( FILE, ">$filesystem" ) or die "open: $!";
+  my $file = $about->path;
+  open( FILE, ">$file" ) or die "open: $!";
   print FILE, $content;
   close FILE;
   
   # Show the user where to see the file
-  my $url = $Location->uri;
+  my $uri = $about->uri;
   print "Author information is at $uri\n";
 
 =head1 DESCRIPTION
@@ -157,7 +157,7 @@ to do method chaining, which is basically
 
   HTML::Location->new( '/foo', 'http://foo.com/' )->catfile( 'bar.txt' )->uri
 
-Which may seem a little trivial now, but I expect to get more useful later.
+Which may seem a little trivial now, but I expect it to get more useful later.
 It also means you can do things like this.
 
   my $base = HTML::Location->new( '/my/cache', 'http://foo.com/' );
@@ -166,7 +166,7 @@ It also means you can do things like this.
   	print $file->path . ': ' . $file->uri . "\n";
   }
 
-In the above example, you don't have to be conmtinuously cloning the location,
+In the above example, you don't have to be continuously cloning the location,
 because all that stuff happens internally as needed.
 
 =head1 METHODS
