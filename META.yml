@@ -1,14 +1,18 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         HTML-Location
-version:      0.7
-version_from: lib/HTML/Location.pm
-installdirs:  site
-requires:
-    Clone:                         0.13
-    File::Spec:                    0.83
-    List::Util:                    1.11
-    Test::More:                    0.47
-
+name: HTML-Location
+version: 1.00
+abstract: Create and work with URI to filesystem path mappings
+author: Adam Kennedy <cpan@ali.as>
+license: perl
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+build_requires:
+  Test::More: 0.47
+  File::Spec: 0.80
+requires:
+  perl: 5.005
+  Clone: 0.13
+  List::Util: 1.11
+  URI: 0
+no_index:
+  directory:
+    - inc
+generated_by: Module::Install version 0.36

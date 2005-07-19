@@ -1,138 +1,5 @@
 package HTML::Location;
 
-# See POD at end for documentation
-
-### Memory Overhead: 88k
-
-use strict;
-use UNIVERSAL 'isa';
-use base 'Clone';
-use URI              ();
-use File::Spec       ();
-use File::Spec::Unix ();
-
-# Overload stringification to the string form of the URL.
-use overload 'bool' => sub () { 1 };
-use overload '""'   => 'uri';
-use overload 'eq'   => '__eq';
-
-use vars qw{$VERSION};
-BEGIN {
-	$VERSION = '0.7';
-}
-
-
-
-
-
-#####################################################################
-# Constructors
-
-sub new {
-	my $class = shift;
-
-	# Get the base file system path
-	my $path = File::Spec->canonpath(shift) or return undef;
-
-	# Get the base URI. We only accept HTTP(s) URLs
-	return undef unless defined $_[0] and ! ref $_[0];
-	my $URI = URI->new( shift, 'http' ) or return undef;
-	$URI->path( '/' ) unless length $URI->path;
-
-	# Create the object
-	bless { path => $path, URI => $URI }, $class;
-}
-
-sub param {
-	my $class = shift;
-	return shift if isa(ref $_[0], 'HTML::Location');
-	return HTML::Location->new(@_) if @_ == 2;
-	if ( ref $_[0] eq 'ARRAY' and @{$_[0]} ) {
-		return HTML::Location->new(@{$_[0]});
-	}
-	undef;	
-}
-
-
-
-
-
-#####################################################################
-# Accessors
-
-sub path { $_[0]->{path} }
-sub uri  { $_[0]->{URI}->as_string }
-sub URI  { Clone::clone $_[0]->{URI} }
-
-
-
-
-
-#####################################################################
-# Manipulate Locations
-
-# Add a directory to the Location.
-# Returns the modified location as a convenience
-sub catdir {
-	my $self = shift;
-	my @args = @_;
-
-	# Alter the URI and local paths
-	my $new_uri  = File::Spec::Unix->catdir( $self->{URI}->path, @args ) or return undef;
-	my $new_path = File::Spec->catdir( $self->{path}, @args ) or return undef;
-
-	# Clone and set the new values
-	my $changed = $self->clone;
-	$changed->{URI}->path( $new_uri );
-	$changed->{path} = $new_path;
-
-	$changed;
-}
-
-# Adds a file to the Location.
-# Returns the modified location as a convenience.
-sub catfile {
-	my $self = shift;
-	my @args = @_;
-
-	# Alter the URI and local paths
-	my $new_uri = File::Spec::Unix->catfile( $self->{URI}->path, @args ) or return undef;
-	my $new_fs  = File::Spec->catfile( $self->{path}, @args ) or return undef;
-
-	# Set both and return
-	my $changed = $self->clone;
-	$changed->{URI}->path( $new_uri );
-	$changed->{path} = $new_fs;
-
-	$changed;
-}
-
-
-
-
-
-#####################################################################
-# Additional Overload Methods
-
-sub __eq {
-	my $left  = isa(ref $_[0], 'HTML::Location') ? shift : return '';
-	my $right = isa(ref $_[0], 'HTML::Location') ? shift : return '';
-	($left->path eq $right->path) and ($left->uri eq $right->uri);
-}
-
-
-
-
-
-#####################################################################
-# Coercion Support
-
-sub __as_URI { shift->URI }
-
-1;
-
-__END__
-
 =pod
 
 =head1 NAME
@@ -205,6 +72,33 @@ because all that stuff happens internally as needed.
 
 =head1 METHODS
 
+=cut
+
+use strict;
+use base 'Clone';
+use URI              ();
+use File::Spec       ();
+use File::Spec::Unix ();
+
+# Overload stringification to the string form of the URL.
+use overload 'bool' => sub () { 1 };
+use overload '""'   => 'uri';
+use overload 'eq'   => '__eq';
+
+use vars qw{$VERSION};
+BEGIN {
+	$VERSION = '1.00';
+}
+
+
+
+
+
+#####################################################################
+# Constructors
+
+=pod
+
 =head2 new $path, $http_url
 
 The C<new> constructor takes as argument a filesystem path and a http(s) 
@@ -213,6 +107,25 @@ illegal. The URL is not required to have protocol, host or port sections,
 and as such allows for host-relative URL to be used.
 
 Returns a new C<HTML::Location> object on success, or C<undef> on failure.
+
+=cut
+
+sub new {
+	my $class = shift;
+
+	# Get the base file system path
+	my $path = File::Spec->canonpath(shift) or return undef;
+
+	# Get the base URI. We only accept HTTP(s) URLs
+	return undef unless defined $_[0] and ! ref $_[0];
+	my $URI = URI->new( shift, 'http' ) or return undef;
+	$URI->path( '/' ) unless length $URI->path;
+
+	# Create the object
+	bless { path => $path, URI => $URI }, $class;
+}
+
+=pod
 
 =head2 param $various
 
@@ -223,10 +136,39 @@ a reference to an array containing the same two arguments.
 
 Returns a HTML::Location if possible, or C<undef> if one cannot be provided.
 
+=cut
+
+sub param {
+	my $class = shift;
+	return shift if UNIVERSAL::isa(ref $_[0], 'HTML::Location');
+	return HTML::Location->new(@_) if @_ == 2;
+	if ( ref $_[0] eq 'ARRAY' and @{$_[0]} ) {
+		return HTML::Location->new(@{$_[0]});
+	}
+	undef;	
+}
+
+
+
+
+
+#####################################################################
+# Accessors
+
+=pod
+
 =head2 uri
 
 The C<uri> method gets and returns the current URI of the location, in 
 string form.
+
+=cut
+
+sub uri {
+	$_[0]->{URI}->as_string;
+}
+
+=pod
 
 =head2 URI
 
@@ -234,9 +176,30 @@ The capitalised C<URI> method gets and returns a copy of the raw L<URI>,
 held internally by the location. Note that only a copy is returned, and
 as such as safe to further modify yourself without effecting the location.
 
+=cut
+
+sub URI {
+	Clone::clone $_[0]->{URI};
+}
+
+=pod
+
 =head2 path
 
 The C<path> method returns the filesystem path componant of the location.
+
+=cut
+
+sub path { $_[0]->{path} }
+
+
+
+
+
+#####################################################################
+# Manipulate Locations
+
+=pod
 
 =head2 catdir 'dir', 'dir', ...
 
@@ -245,39 +208,96 @@ L<File::Spec>, modifying both componants of the location. The C<catdir> method
 returns a B<new> HTML::Location object representing the new location, or
 C<undef> on error.
 
+=cut
+
+sub catdir {
+	my $self = shift;
+	my @args = @_;
+
+	# Alter the URI and local paths
+	my $new_uri  = File::Spec::Unix->catdir( $self->{URI}->path, @args ) or return undef;
+	my $new_path = File::Spec->catdir( $self->{path}, @args )            or return undef;
+
+	# Clone and set the new values
+	my $changed = $self->clone;
+	$changed->{URI}->path( $new_uri );
+	$changed->{path} = $new_path;
+
+	$changed;
+}
+
+=pod
+
 =head2 catfile [ 'dir', ..., ] $file
 
 Like C<catdir>, the C<catfile> method acts in the same was as for 
 L<File::Spec>, and returns a new HTML::Location object representing 
 the file, or C<undef> on error.
 
+=cut
+
+sub catfile {
+	my $self = shift;
+	my @args = @_;
+
+	# Alter the URI and local paths
+	my $uri = File::Spec::Unix->catfile( $self->{URI}->path, @args ) or return undef;
+	my $fs  = File::Spec->catfile( $self->{path}, @args )            or return undef;
+
+	# Set both and return
+	my $changed = $self->clone;
+	$changed->{URI}->path( $uri );
+	$changed->{path} = $fs;
+
+	$changed;
+}
+
+
+
+
+
+#####################################################################
+# Additional Overload Methods
+
+sub __eq {
+	my $left  = UNIVERSAL::isa(ref $_[0], 'HTML::Location') ? shift : return '';
+	my $right = UNIVERSAL::isa(ref $_[0], 'HTML::Location') ? shift : return '';
+	($left->path eq $right->path) and ($left->uri eq $right->uri);
+}
+
+
+
+
+
+#####################################################################
+# Coercion Support
+
+sub __as_URI { shift->URI }
+
+1;
+
+=pod
+
 =head1 TO DO
 
-This package currently contains only minimum of methods required to be 
-useful, and is primily a convenience at this point.
-
-Additional methods will be added over time, and additional checks to 
-catch cases such as catching cases where we may produce a valid filesystem
-path, but the URL would become incorrect.
-
-For now, it is not recommended to use HTML::Location to move upwards through
-the path.
+Add more File::Spec-y methods as needed. Ask if you need one.
 
 =head1 SUPPORT
 
 Bugs should be reported via the CPAN bug tracker at
 
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML%3A%3ALocation>
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML-Location>
 
 For other issues, or commercial enhancement or support, contact the author.
 
 =head1 AUTHORS
 
-Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as
+Adam Kennedy L<http://ali.as/>, cpan@ali.as
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003-2004 Adam Kennedy. All rights reserved.
+Copyright (c) 2003 - 2005 Adam Kennedy. All rights reserved.
+
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
 

@@ -1,16 +1,17 @@
-require 5.000;
-use ExtUtils::MakeMaker;
-WriteMakefile(
-	'NAME'         => 'HTML::Location',
-	'VERSION_FROM' => 'lib/HTML/Location.pm',
-	'PREREQ_PM'    => {
-		'Clone'      => '0.13',
-		'File::Spec' => '0.83',
-		'Test::More' => '0.47',
-		'List::Util' => '1.11',
-	},
-	($] >= 5.005) ? (
-		'AUTHOR'   => 'Adam Kennedy (cpan@ali.as)',
-		'ABSTRACT' => 'Working with disk path <--> URI mappings',
-	) : (),
-);
+use inc::Module::Install;
+
+name          ( 'HTML-Location'              );
+abstract      ( 'Create and work with URI to filesystem path mappings' );
+author        ( 'Adam Kennedy <cpan@ali.as>' );
+version_from  ( 'lib/HTML/Location.pm'       );
+license       ( 'perl'                       );
+requires      ( 'perl'            => '5.005' );
+requires      ( 'Clone'           => '0.13'  );
+requires      ( 'List::Util'      => '1.11'  );
+requires      ( 'URI'             => 0       );
+build_requires( 'Test::More'      => '0.47'  );
+build_requires( 'File::Spec'      => '0.80'  );
+
+auto_install();
+
+&WriteAll;

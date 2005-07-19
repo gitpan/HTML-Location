@@ -19,6 +19,13 @@ use Test::More tests => 128;
 use Scalar::Util 'refaddr';
 use HTML::Location ();
 
+# Precompute the required paths
+my $path1 = catdir(  rootdir(), 'foo'                   );
+my $path2 = catdir(  rootdir(), 'foo2'                  );
+my $path3 = catfile( rootdir(), 'foo', 'foo', 'bar.txt' );
+my $path4 = catdir(  rootdir(), 'foo', 'foo', 'bar'     );
+
+
 
 
 
@@ -26,35 +33,35 @@ use HTML::Location ();
 # Construction
 
 # Create a basic test location
-my $location = HTML::Location->new( '/foo', 'http://foo.com' );
+my $location = HTML::Location->new( $path1, 'http://foo.com' );
 is_normal_location( $location );
-is( $location->path, '/foo', '->path gives expected value' );
+is( $location->path, $path1, '->path gives expected value' );
 is( $location->uri, 'http://foo.com/', '->uri returns expected value' );
 isa_ok( $location->URI, 'URI' );
 isa_ok( $location->__as_URI, 'URI' );
 
 # Test equality and overload
-my $location2 = HTML::Location->new( '/foo',  'http://foo.com' );
-my $location3 = HTML::Location->new( '/foo2', 'http://foo.com' );
-my $location4 = HTML::Location->new( '/foo',  'http://foo2.com' );
+my $location2 = HTML::Location->new( $path1,  'http://foo.com'  );
+my $location3 = HTML::Location->new( $path2, 'http://foo.com'   );
+my $location4 = HTML::Location->new( $path1,  'http://foo2.com' );
 is( ($location->__eq($location2)), 1,  '->__eq returns true correctly'  );
 is( ($location->__eq($location3)), '', '->__eq returns false correctly' );
 is( ($location->__eq($location4)), '', '->__eq returns false correctly' );
 is( ($location->__eq(undef)), '',      '->__eq returns false correctly' );
 is( ($location->__eq()), '',           '->__eq returns false correctly' );
-is( ($location eq $location2), 1,     'eq returns true correctly'  );
-is( ($location eq $location3), '',    'eq returns false correctly' );
-is( ($location eq $location4), '',    'eq returns false correctly' );
-is( ($location eq undef), '',         'eq returns false correctly' );
-is( ($location2 eq $location), 1,     'eq returns true correctly'  );
-is( ($location3 eq $location), '',    'eq returns false correctly' );
-is( ($location4 eq $location), '',    'eq returns false correctly' );
-is( (undef eq $location), '',         'eq returns false correctly' );
-is( $location, $location, 'Two locations match' );
+is( ($location eq $location2), 1,      'eq returns true correctly'      );
+is( ($location eq $location3), '',     'eq returns false correctly'     );
+is( ($location eq $location4), '',     'eq returns false correctly'     );
+is( ($location eq undef), '',          'eq returns false correctly'     );
+is( ($location2 eq $location), 1,      'eq returns true correctly'      );
+is( ($location3 eq $location), '',     'eq returns false correctly'     );
+is( ($location4 eq $location), '',     'eq returns false correctly'     );
+is( (undef eq $location), '',          'eq returns false correctly'     );
+is( $location, $location,              'Two locations match'            );
 
 my $clone = $location->clone;
 is_normal_location( $clone );
-is( $clone->path, '/foo', '->path gives expected value' );
+is( $clone->path, $path1, '->path gives expected value' );
 is( $clone->uri, 'http://foo.com/', '->uri returns expected value' );
 isnt( refaddr($clone), refaddr($location), 'Clone is different to original' );
 
@@ -64,11 +71,11 @@ isa_ok( $param1, 'HTML::Location' );
 is( refaddr($param1), refaddr($location), '->param(Location) returns the same location' );
 is_deeply( $param1, $location, 'Locations match' );
 
-my $param2 = HTML::Location->param( '/foo', 'http://foo.com' );
+my $param2 = HTML::Location->param( $path1, 'http://foo.com' );
 isa_ok( $param2, 'HTML::Location' );
 is_deeply( $param2, $location, 'Locations match' );
 
-my $param3 = HTML::Location->param( [ '/foo', 'http://foo.com' ] );
+my $param3 = HTML::Location->param( [ $path1, 'http://foo.com' ] );
 isa_ok( $param3, 'HTML::Location' );
 is_deeply( $param3, $location, 'Locations match' );
 
@@ -80,12 +87,12 @@ is_deeply( $param3, $location, 'Locations match' );
 my $file = $location->catfile( 'foo', 'bar.txt' );
 is_normal_location( $file );
 isnt( refaddr($location), refaddr($file), '->catfile returns a new object' );
-is( $file->path, '/foo/foo/bar.txt', '->path gives expected value' );
+is( $file->path, $path3, '->path gives expected value' );
 is( $file->uri, 'http://foo.com/foo/bar.txt', '->uri returns expected value' );
 
 # Has the method call changed the original object?
 is_normal_location( $location );
-is( $location->path, '/foo', '->path gives expected value' );
+is( $location->path, $path1, '->path gives expected value' );
 is( $location->uri, 'http://foo.com/', '->uri returns expected value' );
 
 
@@ -96,12 +103,12 @@ is( $location->uri, 'http://foo.com/', '->uri returns expected value' );
 my $dir = $location->catdir( 'foo', 'bar' );
 is_normal_location( $file );
 isnt( refaddr($location), refaddr($dir), '->catfile returns a new object' );
-is( $dir->path, '/foo/foo/bar', '->path gives expected value' );
+is( $dir->path, $path4, '->path gives expected value' );
 is( $dir->uri, 'http://foo.com/foo/bar', '->uri returns expected value' );
 
 # Has the method call changed the original object?
 is_normal_location( $location );
-is( $location->path, '/foo', '->path gives expected value' );
+is( $location->path, $path1, '->path gives expected value' );
 is( $location->uri, 'http://foo.com/', '->uri returns expected value' );
 
 exit();
