@@ -4,7 +4,20 @@ package HTML::Location;
 
 =head1 NAME
 
-HTML::Location - Working with disk to URI file mappings
+HTML::Location - Working with disk to URI file mappings (deprecated: see URI::ToDisk)
+
+=head1 STATUS
+
+As correctly noted by several users, C<HTML::Location> is a really stupid
+name for this module. I apologise, I was new to the whole CPAN game at the
+time I first wrote it.
+
+B<This module has been relocated> to L<URI::ToDisk>. This module will
+remain indefinately for back-compatibility, but should otherwise be
+B<considered deprecated>.
+
+Please convert your code to the otherwise identical L<URI::ToDisk> at
+your leisure.
 
 =head1 SYNOPSIS
 
@@ -87,7 +100,7 @@ use overload 'eq'   => '__eq';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '1.00';
+	$VERSION = '1.01';
 }
 
 

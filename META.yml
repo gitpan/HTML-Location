@@ -1,6 +1,6 @@
 name: HTML-Location
-version: 1.00
-abstract: Create and work with URI to filesystem path mappings
+version: 1.01
+abstract: Working with disk to URI file mappings (deprecated: see URI::ToDisk)
 author: Adam Kennedy <cpan@ali.as>
 license: perl
 distribution_type: module
@@ -15,4 +15,4 @@ requires:
 no_index:
   directory:
     - inc
-generated_by: Module::Install version 0.36
+generated_by: Module::Install version 0.37

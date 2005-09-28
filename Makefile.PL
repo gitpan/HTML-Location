@@ -1,7 +1,7 @@
 use inc::Module::Install;
 
 name          ( 'HTML-Location'              );
-abstract      ( 'Create and work with URI to filesystem path mappings' );
+abstract      ( 'Working with disk to URI file mappings (deprecated: see URI::ToDisk)' );
 author        ( 'Adam Kennedy <cpan@ali.as>' );
 version_from  ( 'lib/HTML/Location.pm'       );
 license       ( 'perl'                       );

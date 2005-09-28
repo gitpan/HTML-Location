@@ -1,5 +1,18 @@
 NAME
-    HTML::Location - Working with disk to URI file mappings
+    HTML::Location - Working with disk to URI file mappings (deprecated: see
+    URI::ToDisk)
+
+STATUS
+    As correctly noted by several users, "HTML::Location" is a really stupid
+    name for this module. I apologise, I was new to the whole CPAN game at
+    the time I first wrote it.
+
+    This module has been relocated to URI::ToDisk. This module will remain
+    indefinately for back-compatibility, but should otherwise be considered
+    deprecated.
+
+    Please convert your code to the otherwise identical URI::ToDisk at your
+    leisure.
 
 SYNOPSIS
       # We have a directory on disk that is accessible via a web server
