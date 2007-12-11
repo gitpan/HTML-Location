@@ -1,5 +1,9 @@
 Revision history for Perl extension HTML::Location
 
+1.02  Tue Dec 11 2007
+	- Legacy release. This is still deprecated.
+	- Removed the use of Module::Install.
+
 1.01  Wed Sep 28 2005
 	- Deprecated. This API has been renamed to URI::ToDisk
 	- My apologies for any inconvenience. This package will
