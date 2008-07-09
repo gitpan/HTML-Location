@@ -1,5 +1,9 @@
 Revision history for Perl extension HTML::Location
 
+1.03  Wed  9 Jul 2008
+	- Legacy release. This is still deprecated.
+	- Moving back to Module::Install (broke META.yml)
+
 1.02  Tue Dec 11 2007
 	- Legacy release. This is still deprecated.
 	- Removed the use of Module::Install.

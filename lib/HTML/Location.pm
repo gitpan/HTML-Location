@@ -88,7 +88,7 @@ because all that stuff happens internally as needed.
 =cut
 
 use strict;
-use base 'Clone';
+use Clone            ();
 use URI              ();
 use File::Spec       ();
 use File::Spec::Unix ();
@@ -98,9 +98,10 @@ use overload 'bool' => sub () { 1 };
 use overload '""'   => 'uri';
 use overload 'eq'   => '__eq';
 
-use vars qw{$VERSION};
+use vars qw{$VERSION @ISA};
 BEGIN {
-	$VERSION = '1.02';
+	$VERSION = '1.03';
+	@ISA     = 'Clone';
 }
 
 
@@ -303,13 +304,13 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML-Location>
 
 For other issues, or commercial enhancement or support, contact the author.
 
-=head1 AUTHORS
+=head1 AUTHOR
 
-Adam Kennedy L<http://ali.as/>, cpan@ali.as
+Adam Kennedy E<lt>adamk@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003 - 2005 Adam Kennedy. All rights reserved.
+Copyright 2003 - 2008 Adam Kennedy.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.

@@ -8,13 +8,8 @@ BEGIN {
 	$^W = 1;
 }
 
+use Test::More tests => 2;
 
-
-
-
-# Does everything load?
-use Test::More 'tests' => 2;
 ok( $] >= 5.005, 'Your perl is new enough' );
-use_ok( 'HTML::Location' );
 
-1;
+use_ok( 'HTML::Location' );
